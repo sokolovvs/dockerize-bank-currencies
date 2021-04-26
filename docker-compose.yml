@@ -1,0 +1,41 @@
+version: '3.3'
+
+services:
+  app:
+    build:
+      context: ./src/bcr
+      dockerfile: ../../services/app/Dockerfile
+    ports:
+      - 8888:8888
+    volumes:
+      - ./src/bcr:/app
+    networks:
+      - localnet
+  postgres:
+    build: ./services/postgres
+    ports:
+      - 54320:5432
+    volumes:
+      - ./volumes/database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB}"
+    networks:
+      - localnet
+  portainer:
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 19000:9000
+      - 18000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./volumes/portainer_data:/data
+    networks:
+      - localnet
+
+networks:
+  localnet:
+    driver: bridge
