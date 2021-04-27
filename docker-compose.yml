@@ -6,7 +6,7 @@ services:
       context: ./src/bcr
       dockerfile: ../../services/app/Dockerfile
     ports:
-      - 8888:8888
+      - "${APP_PORT}:${APP_PORT}"
     volumes:
       - ./src/bcr:/app
     networks:
