@@ -1,4 +1,4 @@
-CREATE TABLE rates
+CREATE TABLE currencies
 (
     id    SERIAL
         CONSTRAINT rates_pk
@@ -8,5 +8,5 @@ CREATE TABLE rates
 );
 
 CREATE UNIQUE INDEX rates_alias_uindex
-    ON rates (alias);
+    ON currencies (alias);
 
