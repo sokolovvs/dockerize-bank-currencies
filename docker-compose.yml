@@ -23,6 +23,15 @@ services:
       POSTGRES_DB: "${POSTGRES_DB}"
     networks:
       - localnet
+  flyway:
+    image: boxfuse/flyway
+    command: -url=jdbc:postgresql://postgres:5432/"${POSTGRES_DB}" -user="${POSTGRES_USER}" -password="${POSTGRES_PASSWORD}" migrate
+    volumes:
+      - ./services/postgres/migrations:/flyway/sql
+    depends_on:
+      - postgres
+    networks:
+      - localnet
   portainer:
     image: portainer/portainer
     command: -H unix:///var/run/docker.sock
