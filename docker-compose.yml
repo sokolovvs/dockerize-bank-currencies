@@ -9,6 +9,8 @@ services:
       - "${APP_PORT}:${APP_PORT}"
     volumes:
       - ./src/bcr:/app
+    depends_on:
+      - postgres
     networks:
       - localnet
   postgres:
