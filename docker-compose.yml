@@ -5,6 +5,11 @@ services:
     build:
       context: ./src/bcr
       dockerfile: ../../services/app/Dockerfile
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:${APP_PORT}/health-check || exit 1" ]
+      interval: 1s
+      timeout: 2s
+      retries: 5
     ports:
       - "${APP_PORT}:${APP_PORT}"
     volumes:
@@ -15,6 +20,11 @@ services:
       - localnet
   postgres:
     build: ./services/postgres
+    healthcheck:
+      test: PGPASSWORD='${POSTGRES_PASSWORD}' psql -U ${POSTGRES_USER} --command='SELECT 1'
+      interval: 1s
+      timeout: 2s
+      retries: 5
     ports:
       - 54320:5432
     volumes:

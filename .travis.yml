@@ -1,0 +1,24 @@
+sudo: required
+
+services:
+  - docker
+
+branches:
+  only:
+    - master
+
+before_install:
+  - make start
+
+script:
+  - curl -f http://localhost:8888/health-check || exit 1
+after_success:
+  - make stop
+
+notifications:
+  email:
+    recipients:
+      - vycheslavsokolov2013@gmail.com
+    on_success: never
+    on_failure: always
+    on_error: always
