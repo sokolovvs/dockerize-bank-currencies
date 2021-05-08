@@ -5,7 +5,5 @@ WORKDIR /app
 COPY . /app
 
 RUN go mod download
-
-RUN go get github.com/githubnemo/CompileDaemon
-
-ENTRYPOINT CompileDaemon --build="go build" --command=./bank-currencies
+RUN CGO_ENABLED=0 GOOS=linux go build -o ./.bin ./cmd/app/main.go
+ENTRYPOINT .bin/main
