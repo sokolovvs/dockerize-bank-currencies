@@ -5,13 +5,9 @@ services:
     build:
       context: ./src/bcr
       dockerfile: ../../services/api/Dockerfile
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:${APP_PORT}/health-check || exit 1" ]
-      interval: 1s
-      timeout: 2s
-      retries: 5
     ports:
       - "${APP_PORT}:${APP_PORT}"
+      - "40000:40000"
     depends_on:
       - postgres
     networks:
@@ -20,17 +16,14 @@ services:
     build:
       context: ./src/bcr
       dockerfile: ../../services/cron/Dockerfile
+    ports:
+      - "50000:50000"
     depends_on:
       - postgres
     networks:
       - localnet
   postgres:
     build: ./services/postgres
-    healthcheck:
-      test: PGPASSWORD='${POSTGRES_PASSWORD}' psql -U ${POSTGRES_USER} --command='SELECT 1'
-      interval: 1s
-      timeout: 2s
-      retries: 5
     ports:
       - 54320:5432
     volumes:

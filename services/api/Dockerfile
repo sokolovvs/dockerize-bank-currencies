@@ -1,14 +1,17 @@
-FROM golang:1.14 AS build
-
+# Compile stage
+FROM golang:1.14 AS build-env
+# Build Delve
+RUN go get github.com/go-delve/delve/cmd/dlv
+ADD . /app
 WORKDIR /app
-COPY . /app
+RUN go mod download && CGO_ENABLED=0 GOOS=linux
+RUN go build -gcflags="all=-N -l" -o /server ./cmd/api/main.go
 
-RUN go mod download && CGO_ENABLED=0 GOOS=linux go build -o ./.bin/api ./cmd/api/main.go
-
+# Final stage
 FROM debian:buster
-
 WORKDIR /
-COPY --from=build /app/.bin/api /api
-COPY --from=build /app/.env /.env
+COPY --from=build-env /go/bin/dlv /
+COPY --from=build-env /server /
+COPY --from=build-env /app/.env /.env
 
-ENTRYPOINT /api
+CMD ["/dlv", "--listen=:40000", "--headless=true", "--api-version=2", "--accept-multiclient", "exec", "/server"]
