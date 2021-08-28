@@ -15,7 +15,7 @@ services:
   cron:
     build:
       context: ./src/bcr
-      dockerfile: ../../services/cron/Dockerfile
+      dockerfile: services/cron/Dockerfile-delve
     ports:
       - "50000:50000"
     depends_on:
