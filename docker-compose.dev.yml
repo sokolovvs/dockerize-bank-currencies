@@ -7,7 +7,6 @@ services:
       dockerfile: ../../services/api/Dockerfile
     ports:
       - "${APP_PORT}:${APP_PORT}"
-      - "40000:40000"
     depends_on:
       - postgres
     networks:
@@ -15,9 +14,7 @@ services:
   cron:
     build:
       context: ./src/bcr
-      dockerfile: services/cron/Dockerfile-delve
-    ports:
-      - "50000:50000"
+      dockerfile: ../../services/cron/Dockerfile
     depends_on:
       - postgres
     networks:
@@ -41,18 +38,6 @@ services:
       - ./services/postgres/migrations:/flyway/sql
     depends_on:
       - postgres
-    networks:
-      - localnet
-  portainer:
-    image: portainer/portainer
-    command: -H unix:///var/run/docker.sock
-    restart: always
-    ports:
-      - 19000:9000
-      - 18000:8000
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./volumes/portainer_data:/data
     networks:
       - localnet
 

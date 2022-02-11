@@ -13,5 +13,3 @@ make start
 ___
 
 ## The full commands list is [here](./Makefile)
-
-### You can use [portainer](http://localhost:19000) to manage containers and to read logs
