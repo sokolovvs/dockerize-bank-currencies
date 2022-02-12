@@ -1,5 +1,5 @@
 # Compile stage
-FROM golang:1.14 AS build-env
+FROM golang:1.17 AS build-env
 ADD . /app
 WORKDIR /app
 RUN go mod download && CGO_ENABLED=0 GOOS=linux
